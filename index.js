@@ -18,6 +18,7 @@ async function run() {
   try {
     await client.connect();
     const specialProductCollection = client.db('pharma_db').collection('special_products');
+    const allProductCollection = client.db('pharma_db').collection('all_products');
     
     //get all Products
     app.get('/specialProducts', async (req, res) => {
@@ -34,7 +35,18 @@ async function run() {
     })
 
 
+    //get all products
+    app.get('/allProducts', async (req, res) => {
+      const tools = await allProductCollection.find().toArray();
+      res.send(tools);
+    });
 
+    app.get('/allProducts/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) }
+      const tool = await allProductCollection.findOne(query)
+      res.send(tool)
+    })
   }
   finally {
 
