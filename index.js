@@ -5,7 +5,7 @@ require('dotenv').config();
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5001;
 
 app.use(cors());
 app.use(express.json());
@@ -19,6 +19,7 @@ async function run() {
     await client.connect();
     const specialProductCollection = client.db('pharma_db').collection('special_products');
     const allProductCollection = client.db('pharma_db').collection('all_products');
+    const employeeCollection = client.db('pharma_db').collection('employee');
     
     //get all Products
     app.get('/specialProducts', async (req, res) => {
@@ -39,6 +40,12 @@ async function run() {
     app.get('/allProducts', async (req, res) => {
       const tools = await allProductCollection.find().toArray();
       res.send(tools);
+    });
+    
+    app.post('/employees', async (req, res) => {
+      const employee = req.body;
+      const result = await employeeCollection.insertOne(employee);
+      res.send(result);
     });
 
     app.get('/allProducts/:id', async (req, res) => {
