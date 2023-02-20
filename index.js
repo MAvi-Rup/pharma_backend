@@ -26,6 +26,7 @@ async function run() {
       const tools = await specialProductCollection.find().toArray();
       res.send(tools);
     });
+    
 
     
     app.get('/specialProducts/:id', async (req, res) => {
@@ -34,6 +35,8 @@ async function run() {
       const tool = await specialProductCollection.findOne(query)
       res.send(tool)
     })
+
+    
 
 
     //get all products
@@ -47,6 +50,16 @@ async function run() {
       const result = await employeeCollection.insertOne(employee);
       res.send(result);
     });
+    app.get('/employees', async (req, res) => {
+      const employee = await employeeCollection.find().toArray();
+      res.send(employee);
+    });
+    app.get('/employees/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) }
+      const employee = await employeeCollection.findOne(query)
+      res.send(employee)
+    })
 
     app.get('/allProducts/:id', async (req, res) => {
       const id = req.params.id;
