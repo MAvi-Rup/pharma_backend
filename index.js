@@ -61,6 +61,39 @@ async function run() {
       res.send(employee)
     })
 
+    app.put('/employees/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const employee = req.body;
+      const updateDocument = {
+        $set: {
+          name: employee.name,
+          age: employee.age,
+          department: employee.department,
+          salary: employee.salary,
+          annualLeave: employee.annualLeave,
+          imageSrc: employee.imageSrc,
+          presentAddress: employee.presentAddress,
+          email: employee.email,
+          phone: employee.phone,
+          permanentAddress: employee.permanentAddress
+        }
+      };
+      const options = { upsert: true };
+      const result = await employeeCollection.updateOne(query, updateDocument, options);
+      res.send(result);
+    });
+
+    app.delete('/employees/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await employeeCollection.deleteOne(query);
+      res.send(result);
+    });
+    
+    
+    
+
     app.get('/allProducts/:id', async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) }
